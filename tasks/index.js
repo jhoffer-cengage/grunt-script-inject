@@ -47,13 +47,19 @@ module.exports = function (grunt) {
         }
 
         if (this.data.html) {
-            htmlText = grunt.file.read(this.data.html);
-            var content = "";
-            for (var i = 0; i < sources.length; i++) {
-                content += '    <script src="' + sources[i] + '"></script>\n';
+            if (typeof this.data.html == 'string') {
+                this.data.html = [this.data.html];
             }
-            grunt.file.write(this.data.html, htmlText.replace(/\<\!\-\-(\s){0,}scriptinject begin(\s){0,}\-\-\>([\s\S]*?)\<\!\-\-(\s){0,}scriptinject end(\s){0,}\-\-\>/, '<!-- scriptinject begin -->\n' + content + '    <!-- scriptinject end -->'));
-            grunt.log.ok('injected'.blue + ' into ' + this.data.html);
+
+            for(var j=0;j<this.data.html.length;j++) {
+                htmlText = grunt.file.read(this.data.html[j]);
+                var content = "";
+                for (var i = 0; i < sources.length; i++) {
+                    content += '    <script src="' + sources[i] + '"></script>\n';
+                }
+                grunt.file.write(this.data.html[j], htmlText.replace(/\<\!\-\-(\s){0,}scriptinject begin(\s){0,}\-\-\>([\s\S]*?)\<\!\-\-(\s){0,}scriptinject end(\s){0,}\-\-\>/, '<!-- scriptinject begin -->\n' + content + '    <!-- scriptinject end -->'));
+                grunt.log.ok('injected'.blue + ' into ' + this.data.html[j]);
+            }
         } else {
             grunt.log.error('Please specify a html file to be script tags injected.');
             return;
