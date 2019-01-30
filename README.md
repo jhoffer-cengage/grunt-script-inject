@@ -1,3 +1,4 @@
+# DEPRECATED
 grunt-script-inject
 
 #Author
